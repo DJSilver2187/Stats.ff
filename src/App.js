@@ -6,11 +6,9 @@ import SummonerDisplay from "./SummonerDisplay"
 import "./styles.css";
 import Logo from "./pictures/TeemoWalk.gif";
 
-
-//Flask API domain
-const domain = 'http://192.168.4.24:5000'
-
+//Id for the blank item png
 const itemIdPlaceholder = 7050;
+
 let matchIds = [];
 let matchInfo = [];
 let puuid;
@@ -55,11 +53,12 @@ function App() {
   const [reRender, setReRender] = useState(false);
 
 
-  //Get summoner's PUUID via SUMMONER-V4 API
   let searchSummoner = async () => {
     gameElements = [];
     summonerComponent = null;
-    let response = await fetch(`${domain}/getSummoner/${summonerName}`);
+
+    //Get summoner's PUUID via SUMMONER-V4 API
+    let response = await fetch(`http://127.0.0.1:5000/getSummoner/${summonerName}`);
     let data = await response.json();
     console.log(data);
     setSummonerObject(data);
@@ -67,15 +66,15 @@ function App() {
     puuid = data.puuid;
 
     //Get summoner's recent match ids via MATCH-V5 API
-    response = await fetch(`${domain}/getMatchIds/${region}/${puuid}?start=${matchIndexStart}&count=${matchIndexCount}`);  
+    response = await fetch(`http://127.0.0.1:5000/getMatchIds/${region}/${puuid}?start=${matchIndexStart}&count=${matchIndexCount}`);  
     data = await response.json();
     console.log(data);
     matchIds = data;
     matchInfo = [];
 
-    //Get summoner's recent game information via {blank}
+    //Get summoner's recent game information via MATCH-V5 API
     for(let i=0; i < matchIds.length; i++) {
-      response = await fetch(`${domain}/getMatchInfo/${region}/${matchIds[i]}`);
+      response = await fetch(`http://127.0.0.1:5000/getMatchInfo/${region}/${matchIds[i]}`);
       if(response.status === 200) {  
         data = await response.json();
         matchInfo[i] = data; }
@@ -83,8 +82,6 @@ function App() {
     }
 
     generateMatches();
-
-    setReRender(!reRender);
   }
 
   

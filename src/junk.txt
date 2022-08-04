@@ -1,0 +1,68 @@
+// //Get summoner's recent match IDs via MATCH-V5 API
+  // let fetchRecentMatchIds = async () => {
+  //   let response = await fetch(`https://${region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=${matchIndexStart}&count=${matchIndexCount}&api_key=${apiKey}`);  
+  //   let data = await response.json();
+  //   matchIds = await data;
+  //   console.log(matchIds);
+    
+  // }
+
+  // let fetchMatchInfo = async () => {
+  //   for(let i=0; i < matchIds.length; i++) {
+  //     let response = await fetch(`https://${region}.api.riotgames.com/lol/match/v5/matches/${matchIds[i]}?api_key=${apiKey}`);
+  //     let data = await response.json();
+  //     matchInfo.push(data);
+  //   }
+  //   console.log(matchInfo.length);
+  // }
+
+  // function chainCalls() {
+    // setSummonerName("");
+    // setSummonerObject("");
+    // setPuuid("");
+    // setMatchIndexStart(0);
+    // setMatchIndexCount(10);
+    // matchIds = [];
+    // matchInfo = [];
+    // gameElements = [];
+
+    //fetchPuuid();
+    // fetchRecentMatchIds();
+    // fetchMatchInfo();
+  
+    //Get summoner's PUUID via SUMMONER-V4 API
+    // fetch(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/ 
+    //        ${summonerName}?api_key= ${apiKey}`)
+    // .then(response => {
+    //   return response.json();
+    // })
+    // .then(data => {
+    //   setSummonerObject(data);
+    //   setPuuid(data.puuid);
+
+    //   //Get summoner's recent match IDs via MATCH-V5 API
+    //   fetch(`https://${region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=${matchIndexStart}&count=${matchIndexCount}&api_key=${apiKey}`)
+    //   .then(response => {
+    //   return response.json();
+    //   })
+    //   .then(data => {
+    //     matchIds = data;
+    //     console.log(data)
+    //     for(let i = 0; i < matchIds.length; i++)
+    //     {
+    //       fetch(`https://${region}.api.riotgames.com/lol/match/v5/matches/${matchIds[i]}?api_key=${apiKey}`)
+    //       .then(response => {
+    //         return response.json();
+    //       })
+    //       .then(data => {
+    //         matchInfo.push(data);
+    //         console.log(data.metadata.matchId);
+    //       })
+    //     }
+    //   })  
+    // })
+  //}    
+  
+
+  // const gameElements = matchInfo.map(game => {
+  //   <Game matchNumber={game.metadata.matchId}/>})

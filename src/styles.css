@@ -149,6 +149,12 @@ body {
     justify-content: space-around;
 }
 
+.game-container:hover {
+    border-color:rgba(216, 185, 9, 0.767);
+    cursor:pointer;
+    border-width:2px;
+}
+
 
 #champion-and-level-container {
     padding: .4em 0 .2em .4em;
@@ -188,8 +194,8 @@ body {
 }
 
 #summoner-spell-1 {
-    width:25%;
-    height:30%;
+    width: 2em;
+    height: 2em;
     margin-right: .15em;
     border-width: 2px;
     border-color: rgba(54, 54, 54, 0.781);
@@ -197,8 +203,8 @@ body {
 }
 
 #summoner-spell-2 {
-    width:25%;
-    height:30%;
+    width: 2em;
+    height: 2em;
     border-width: 2px;
     border-color: rgba(54, 54, 54, 0.781);
     border-style: solid;
@@ -225,6 +231,11 @@ body {
     border-width: 1px;
     margin-right: 2px;
 
+}
+
+#kda > img{
+    margin-left: .2em;
+    margin-top: .1em;
 }
 
 #creep-score {
@@ -263,6 +274,137 @@ body {
 #game-date {
     margin-left: .5em;
 }
+
+@keyframes fade-in-out{
+    0%{ opacity: 1;}
+    100%{ opacity: 0;}
+}
+
+.fade-in-and-out{
+    animation: fade-in-out .3s alternate-reverse 
+}
+
+.team-header-container {
+    display: grid;
+    grid-template-columns: 15em 15em 15em;
+    font-size: 1.2em;
+    color: rgba(255, 255, 255, .9);
+    margin-left: .75em;
+    margin-top: .75em;
+}
+
+#team-header-gold{
+    height:.8em;
+    width:1em;
+    margin-left: .1em;
+    margin-top: .1em;
+}
+
+#team-header-kda{
+    margin-left: .1em;
+    margin-top: .1em;
+}
+
+.team-container {
+    display: grid;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    grid-template-columns: .5fr .95fr .7fr 2fr .8fr .8fr .8fr;
+    align-items: center;
+    margin-bottom: 1em;
+    color:rgb(224, 223, 223);
+    background-color: rgb(38, 42, 44);
+    padding-bottom: .5em;
+}
+
+.team-champion-icon {
+    height: 2.5em;
+    width: 2.5em;
+    border-radius: 1.5em;
+    border-color: gold;
+    border-width: 2px;
+    border-style: solid;
+    margin-top: .5em;
+    margin-left: .5em;
+}
+
+.participant-summoner-spell
+{
+    width:1.6em;
+    height:1.6em;
+    margin-top:.5em;
+    margin-left:.2em;
+    border-style: solid;
+    border-color: gold;
+    border-width: 1px;
+}
+
+#participant-level {
+    color: white;
+    font-size: .7em;
+    background-color: rgba(0, 0, 0);
+    border-radius: 15px;
+    border-style: solid;
+    border-color: rgb(216, 184, 0);
+    border-width: .18em;
+    position: relative;
+    padding: 3px 3px 3px 3px;
+    margin-left: -1em;
+    margin-bottom:-1em;
+}
+
+#participant-summoner-name > span:hover{
+    cursor: pointer;
+    color: rgb(66, 66, 255);
+}
+
+.team-item-image {
+    height: 1.8em;
+    width: 1.8em;
+    margin-top:.5em;
+    margin-left: .15em;
+    border-color: gold;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.participant-stat-icon{
+    height: 1em;
+    width: 1.2em;
+    padding-top:2px;
+    margin-left: .2em;
+    margin-top: .2em;
+}
+
+#participant-kda{
+    margin-left:.2em;
+}
+
+#participant-cs{
+    height:1em;
+    width:1em;
+    margin-left: .2em;
+}
+
+#loading {
+    display: block;
+    max-width: 10%;
+    max-height: 10%;
+    margin-top: 1em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#loading-text {
+    margin-top: 1em;
+    margin-left: 47%;
+    margin-right: 50%;
+    font-size: 1.5em;
+    font-style: bold;
+    color: white;
+}
+
 
 #footer-container {
     margin-top: 5em;

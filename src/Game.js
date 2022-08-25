@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "./styles.css"
 import CreepScore from "./pictures/CreepScore.png"
 import Gold from "./pictures/Gold-Coin-Transparent.png"
+import Kda from "./pictures/kda.png"
+import Team from "./Team"
+
 
 const baseItemUrl = "./pictures/item/";
 
 export default function Game(props) {
+   const [showTeamStats, setShowTeamStats] = useState(false);
+
+
    return (
-    <div className="game-container" 
+   <div className="overall-container">   
+    <div className="game-container" onClick={() => {
+      setShowTeamStats(prevState => !prevState);
+      }}
          style={{backgroundColor: props.victory ? 'rgba(5,90,140, .60)' : 'rgba(211,29,12, 0.5)' }}>
-         
 
          {/*Flex item 1: Champion and level*/}
          <div id="champion-and-level-container">
@@ -75,6 +83,8 @@ export default function Game(props) {
             <div id="kda-cs-gold-container">
                <span id="kda">
                   {`${props.kills}/${props.deaths}/${props.assists}`}
+                  <img
+                  src={Kda}/>
                </span>
 
                <span id="creep-score">
@@ -108,5 +118,72 @@ export default function Game(props) {
             </div>
          </div>
     </div> 
+
+      {showTeamStats && 
+        <div className="fade-in-and-out">
+          <div className="team-header-container">
+            <div>Team 1</div>
+            <div>
+               {`${props.teamOneKills}/${props.teamOneDeaths}/${props.teamOneAssists}`}
+               <img
+               id="team-header-kda"
+               src={Kda}/>
+            </div>
+            <div>{props.teamOneGold.toLocaleString('en-US')}
+               <img
+               id="team-header-gold"
+               src={Gold}/>
+            </div>          
+         </div>
+
+          <Team
+            participants={props.teamOne}
+            victory={props.teamOne[0].win}
+            summonerSpellMap={props.summonerSpellMap}
+            currentSummoner ={props.currentPlayer}
+            teamKills={props.teamOneKills}
+            teamDeaths={props.teamOneDeaths}
+            teamAssists={props.teamOneAssists}
+            teamGold={props.teamOneGold}
+
+            searchSummoner={props.searchSummoner()}
+            setSummonerName={props.setSummonerName()}
+          />
+
+         
+         <div className="team-header-container">
+            <div>Team 2</div>
+            <div>
+               {`${props.teamTwoKills}/${props.teamTwoDeaths}/${props.teamTwoAssists}`}
+               <img
+               id="team-header-kda"
+               src={Kda}
+               />
+            </div>
+            <div>{props.teamTwoGold.toLocaleString('en-US')}
+               <img
+                  id="team-header-gold"
+                  src={Gold}
+               />
+            </div>
+         </div>
+
+
+          <Team
+           participants={props.teamTwo}
+           victory={props.teamTwo[0].win}
+           summonerSpellMap={props.summonerSpellMap}
+           currentSummoner ={props.currentPlayer}
+           teamKills={props.teamTwoKills}
+           teamDeaths={props.teamTwoDeaths}
+           teamAssists={props.teamTwoAssists}
+           teamGold={props.teamTwoGold}
+
+           searchSummoner={props.searchSummoner()}
+           setSummonerName={props.setSummonerName()}
+            />
+            
+         </div>}
+    </div>
    ) 
 }

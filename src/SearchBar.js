@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import "./styles.css";
 import SearchIcon from "./pictures/SearchIcon.png"
 
+let name = "";
+
 export default function SearchBar(props) {
+
     return (
         <div className="input-container">
 
@@ -27,11 +30,12 @@ export default function SearchBar(props) {
 
          <span id="summoner-container">
           <label>Name</label> <br/>
-         <input onChange={props.Summoner()} type="Textbox" placeholder="Summoner Name"/>
+         <input onChange={event => {name = event.target.value}} 
+         type="Textbox" placeholder="Summoner Name"/>
         </span>
 
 
-        <button onClick={props.Puuid()} id="search-bar-submit" >
+        <button onClick={() => props.searchSummoner(name)} id="search-bar-submit" >
          <img id="search-bar-image" src={SearchIcon}></img>
         </button>
         <br/><br/>

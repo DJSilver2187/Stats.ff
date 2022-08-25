@@ -1,3 +1,5 @@
+![chrome_BefrfZoOcQ](https://user-images.githubusercontent.com/61018496/186763023-c5b56f47-f13f-4940-9ca9-490dd97cbbef.gif)
+
 In the project directory, you can run:
 
 ### `npm install`

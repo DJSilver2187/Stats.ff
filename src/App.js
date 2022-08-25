@@ -5,6 +5,7 @@ import Footer from "./Footer"
 import SummonerDisplay from "./SummonerDisplay"
 import "./styles.css";
 import Logo from "./pictures/TeemoWalk.gif";
+import Zac from "./pictures/ZacWalk.gif";
 
 //Specify the address of the flask API 
 let flaskAddress = "192.168.4.24:5000";
@@ -17,6 +18,7 @@ let matchInfo = [];
 let puuid;
 let gameElements = [];
 let summonerComponent;
+let trueSummonerName;
 
 //Fetch Riot's current list of queue types
 let queues = new Map();
@@ -46,27 +48,32 @@ fetch("https://ddragon.leagueoflegends.com/cdn/12.13.1/data/en_US/summoner.json"
       object.data[ref].image.full))    
     });
 
-
 function App() {
   const [matchIndexStart, setMatchIndexStart] = useState(0);
   const [matchIndexCount, setMatchIndexCount] = useState(10);
   const [summonerName, setSummonerName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [logoVisible, setLogoVisible] = useState(true);
   const [summonerObject, setSummonerObject] = useState("");
   const [region, setRegion] = useState("americas");
   const [reRender, setReRender] = useState(false);
 
-
-  let searchSummoner = async () => {
+  let searchSummoner = async (name) => {
+    console.log(name);
+    setLogoVisible(false);
     gameElements = [];
     summonerComponent = null;
 
     //Get summoner's PUUID via SUMMONER-V4 API
-    let response = await fetch(`http://${flaskAddress}/getSummoner/${summonerName}`);
+    let response = await fetch(`http://${flaskAddress}/getSummoner/${name}`);
     let data = await response.json();
     console.log(data);
     setSummonerObject(data);
     generateSummoner(data);
+    setSummonerName(data.name);
+    trueSummonerName = data.name;
     puuid = data.puuid;
+    setLoading(prev => !prev);
 
     //Get summoner's recent match ids via MATCH-V5 API
     response = await fetch(`http://${flaskAddress}/getMatchIds/${region}/${puuid}?start=${matchIndexStart}&count=${matchIndexCount}`);  
@@ -85,6 +92,9 @@ function App() {
     }
 
     generateMatches();
+    setLoading(false);
+
+    //Force re-render... Note: Implement useEffect hook
     setReRender(!reRender);
   }
 
@@ -101,15 +111,49 @@ const generateSummoner = (data) => {
 const generateMatches = () => {
   gameElements = [];
   let queueId;
+    //Front-facing info logic
     for (let i = 0; i < matchInfo.length; i++) {
       queueId = getQueueIdFromMatchInfo(matchInfo[i]);
       let playerSpells = getSummonerSpellsFromMatchInfo(matchInfo[i]);
       let playerItems = getItemsFromMatchInfo(matchInfo[i]);
+      let participants = matchInfo[i].info.participants;
+
+      let teamOneParticipants = [];
+      let teamTwoParticipants = [];
+
+      let teamOneKills = 0;
+      let teamOneDeaths = 0;
+      let teamOneAssists = 0;
+      let teamOneGold = 0;
+
+      let teamTwoKills = 0;
+      let teamTwoDeaths = 0;
+      let teamTwoAssists = 0;
+      let teamTwoGold = 0;
+
       validateItems(playerItems);
+      //Team info logic
+      for(let j = 0; j < participants.length; j++) {
+        if (participants[j].teamId === 100) {
+          teamOneParticipants.push(participants[j]); 
+          teamOneKills += participants[j].kills;
+          teamOneDeaths += participants[j].deaths;
+          teamOneAssists += participants[j].assists;
+          teamOneGold += participants[j].goldEarned;
+        }
+        else {
+          teamTwoParticipants.push(participants[j])
+          teamTwoKills += participants[j].kills;
+          teamTwoDeaths += participants[j].deaths;
+          teamTwoAssists += participants[j].assists;
+          teamTwoGold += participants[j].goldEarned;
+        }
+      }
 
       gameElements[i] = 
 
         <Game 
+         
          matchNumber={matchInfo[i].metadata.matchId}
          championName={getChampionFromMatchInfo(matchInfo[i])}
          championLevel={getChampionLevelFromMatchInfo(matchInfo[i])}
@@ -123,6 +167,8 @@ const generateMatches = () => {
           playerSpells.summoner2 > 10000? "Summoner_UltBookPlaceholder.png" :
           summonerSpells.get(playerSpells.summoner2)}
 
+         summonerSpellMap={summonerSpells}
+
          items={playerItems}
 
          kills={getKillsFromMatchInfo(matchInfo[i])}
@@ -135,7 +181,24 @@ const generateMatches = () => {
          map={queues.get(queueId).map}
          gameDuration={getGameDurationFromMatchInfo(matchInfo[i])}
          gameDate={getGameDateFromMatchInfo(matchInfo[i])}
-        />;
+
+         teamOne={teamOneParticipants}
+         teamOneKills={teamOneKills}
+         teamOneDeaths={teamOneDeaths}
+         teamOneAssists={teamOneAssists}
+         teamOneGold={teamOneGold}
+
+         teamTwo={teamTwoParticipants}
+         teamTwoKills={teamTwoKills}
+         teamTwoDeaths={teamTwoDeaths}
+         teamTwoAssists={teamTwoAssists}
+         teamTwoGold={teamTwoGold}
+
+         currentPlayer ={trueSummonerName}
+         searchSummoner={() => searchSummoner}
+         setSummonerName={() => setSummonerNameTheFuckingHardWay}
+        />
+
      }
 }
 
@@ -292,13 +355,17 @@ const handleRegion = event => {
   setRegion(event.target.value);
 }
 
+const setSummonerNameTheFuckingHardWay = (name) => {
+    setSummonerName(name);
+}
+
   return (
     <div className="App">
-      <img src={Logo} id="logo" />
+      {logoVisible && <img src={Logo} id="logo" />}
       <SearchBar 
         Summoner={() => handleSummoner}
         Region={() => handleRegion}
-        Puuid={() => searchSummoner}
+        searchSummoner={searchSummoner}
       />
 
       <div className="summoner-container">
@@ -308,6 +375,10 @@ const handleRegion = event => {
       <div className="games-container">
        {gameElements}
       </div>
+      {loading && 
+      <><img src={Zac} id="loading"/>
+      <div id="loading-text">Loading Matches...</div>
+      </>}
       <Footer/>
     </div>
   );
